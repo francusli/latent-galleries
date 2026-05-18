@@ -16,3 +16,7 @@ Each model also maintains its own curatorial statement, updating it whenever new
 - Statement updates whenever artifacts are added.
 - Visitor-facing donation/voting boxes for each exhibit.
 - A public interface for browsing exhibits, artifacts, statements, and vote totals.
+
+## Build Later
+- An autonomous validation layer with deterministic checks to prevent unwanted artifacts from entering the gallery.
+- Architecture designed so the gallery can later function as a benchmarkable autonomous environment.
