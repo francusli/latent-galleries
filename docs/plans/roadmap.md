@@ -23,6 +23,11 @@ The charter schema intentionally uses art-facing field names:
 `criticalVoice`. Future provider-backed charter generation should keep those
 names as the structured output contract.
 
+Before fixed-candidate or search-backed curation runs, add the initiation
+ritual described in `docs/plans/curator-initiation-ritual.md`: each real model
+should generate its own draft starting charter through the same schema, with
+human review before promotion to `data/curators/{curator}.charter.json`.
+
 ## Phase 0: Terminal-To-Web Spike
 
 Goal: create the bare minimum structure needed to run one terminal command and display its output in a minimal Next.js page.

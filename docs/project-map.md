@@ -39,11 +39,17 @@ docs/project-map.md
 docs/plans/roadmap.md
   Sequential phase roadmap for the MVP.
 
+docs/plans/README.md
+  Concise structure guide for agent-friendly plans.
+
 docs/plans/phase-0-terminal-to-web-spike.md
   Active Phase 0 execution plan.
 
 docs/plans/standalone-curator-charter.md
   Plan for durable curator identity and charter generation.
+
+docs/plans/curator-initiation-ritual.md
+  Plan for provider-backed initial gallery identity generation.
 
 app/
   Current Next.js app route surface.
