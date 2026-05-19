@@ -53,6 +53,21 @@ public/
 
 package.json
   Scripts and dependencies.
+
+scripts/generate-charter.ts
+  Terminal entrypoint for deterministic standalone curator charter generation.
+
+src/domain/curator-charter.ts
+  Shared curator charter types, constants, validation, and prompt rendering.
+
+src/curators/mock-charters.ts
+  Deterministic seed charter identities for GPT, Claude, Gemini, and Grok.
+
+src/storage/curator-charter-files.ts
+  Local JSON read/write helpers for canonical charter files.
+
+data/curators/*.charter.json
+  Canonical generated charter JSON files for each curator.
 ```
 
 ## Current Commands
@@ -62,6 +77,10 @@ npm run dev
 npm run build
 npm run start
 npm run lint
+npm run typecheck
+npm run test
+npm run generate-charter -- --curator gpt
+npm run generate-charter -- --all
 ```
 
 Phase-specific scripts such as `npm run mock-curation -- --exhibit gpt` should be added when Phase 0 is implemented.

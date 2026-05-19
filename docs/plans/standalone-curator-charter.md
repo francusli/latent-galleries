@@ -2,7 +2,7 @@
 
 ## Summary
 
-Build a standalone Curator Charter capability so each AI curator has a structured, durable identity before daily curation begins. Each charter defines the curator's gallery name, taste, curatorial statement, selection criteria, anti-criteria, search style, and voice.
+Build a standalone Curator Charter capability so each AI curator has a structured, durable identity before daily curation begins. Each charter defines the curator's gallery name, curatorial approach, curatorial statement, preferred media, guiding questions, selection principles, exclusions, research orientation, and critical voice.
 
 Use JSON as the canonical source of truth. Markdown can be generated later for human-readable docs or admin surfaces, but should not be the authoritative format.
 
@@ -24,13 +24,13 @@ Each curator charter should be stored as JSON with these required fields:
 type CuratorCharter = {
   curatorId: "gpt" | "claude" | "gemini" | "grok";
   galleryName: string;
-  tasteStatement: string;
+  curatorialApproach: string;
   curatorialStatement: string;
-  preferredMediums: string[];
-  recurringQuestions: string[];
-  selectionCriteria: string[];
-  antiCriteria: string[];
-  searchStyle:
+  preferredMedia: string[];
+  guidingQuestions: string[];
+  selectionPrinciples: string[];
+  exclusions: string[];
+  researchOrientation:
     | "broad"
     | "niche"
     | "historical"
@@ -38,7 +38,7 @@ type CuratorCharter = {
     | "visual"
     | "cultural"
     | "experimental";
-  voiceGuidelines: string;
+  criticalVoice: string;
   createdAt: string;
   updatedAt: string;
   version: string;
@@ -56,46 +56,71 @@ data/curators/grok.charter.json
 
 ## Implementation Plan
 
-1. Add a shared charter module that owns:
+1. Add a shared charter module that owns: **implemented in `src/domain/curator-charter.ts`**
    - the TypeScript type;
    - allowed curator IDs;
-   - allowed search styles;
+   - allowed research orientations;
    - validation helpers;
-   - file read/write helpers;
    - prompt rendering helper for future model calls.
 
-2. Add a deterministic mock generator:
+2. Add local file helpers: **implemented in `src/storage/curator-charter-files.ts`**
+   - read/write `data/curators/{curator}.charter.json`;
+   - create `data/curators/` when missing;
+   - preserve `createdAt` when regenerating;
+   - validate before writing so invalid output does not overwrite a valid charter.
+
+3. Add a deterministic mock generator: **implemented in `src/curators/mock-charters.ts` and `scripts/generate-charter.ts`**
    - `npm run generate-charter -- --curator gpt`
    - `npm run generate-charter -- --all`
    - writes one canonical JSON file per curator;
    - preserves `createdAt` when regenerating an existing charter;
    - updates `updatedAt` on each successful regeneration.
 
-3. Make all four mock charters distinct:
+4. Make all four mock charters distinct: **implemented in `data/curators/*.charter.json`**
    - each curator should have a different `galleryName`;
-   - each curator should have a different `tasteStatement`;
+   - each curator should have a different `curatorialApproach`;
    - each curator should have a clear, non-identical curatorial voice;
-   - search styles may overlap later, but should start distinct enough to compare behavior.
+   - research orientations may overlap later, but should start distinct enough to compare behavior.
 
-4. Add a prompt rendering helper that converts JSON into a compact text block:
+5. Add a prompt rendering helper that converts JSON into a compact text block:
 
 ```txt
 Current curator charter:
 Gallery name: ...
-Taste statement: ...
+Curatorial approach: ...
 Curatorial statement: ...
-Selection criteria:
+Selection principles:
 - ...
-Anti-criteria:
+Exclusions:
 - ...
-Search style: ...
-Voice: ...
+Research orientation: ...
+Critical voice: ...
 ```
 
-5. Keep malformed output from corrupting the source of truth:
+6. Keep malformed output from corrupting the source of truth:
    - validate before writing;
    - do not overwrite an existing charter with invalid output;
    - fail clearly with validation errors.
+
+## Current Implementation
+
+The standalone charter slice is now available without adding provider API calls,
+database storage, or app UI. The canonical command shape is:
+
+```sh
+npm run generate-charter -- --curator gpt
+npm run generate-charter -- --all
+```
+
+Tests cover charter validation, prompt rendering, local file generation,
+regeneration timestamp behavior, distinct mock identities, and invalid-output
+overwrite protection.
+
+The schema now uses art-facing charter terminology rather than internal product
+labels: `curatorialApproach`, `preferredMedia`, `guidingQuestions`,
+`selectionPrinciples`, `exclusions`, `researchOrientation`, and
+`criticalVoice`. Future provider prompts and response schemas should use these
+names directly.
 
 ## Future API Version
 
@@ -130,7 +155,7 @@ The API-backed generator should:
 - Generate all mock charters:
   - all four files are created;
   - each curator has a distinct `galleryName`;
-  - each curator has a distinct `tasteStatement`;
+  - each curator has a distinct `curatorialApproach`;
   - each curator has a distinct enough starting voice.
 
 - Re-run generation:
@@ -141,7 +166,7 @@ The API-backed generator should:
 - Validate prompt rendering:
   - loaded charter becomes a readable prompt section;
   - all required fields are represented;
-  - selection criteria and anti-criteria render as lists.
+  - selection principles and exclusions render as lists.
 
 - Validate failure behavior:
   - invalid generated output is rejected;

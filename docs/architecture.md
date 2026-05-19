@@ -26,21 +26,25 @@ scripts/
 
 src/domain/
   Shared domain types, constants, validation, and parsing.
+  Curator charter contracts and prompt rendering now live here.
 
 src/curation/
   Curation runner and workflow orchestration.
 
 src/curators/
   Curator adapter interface plus provider-specific adapters for GPT, Claude, Gemini, and Grok.
+  Deterministic mock curator charter profiles now live here.
 
 src/search/
   Search service interface plus mock and real search provider implementations.
 
 src/storage/
   Storage interface and implementations, starting with local JSON and later moving to SQLite or another database.
+  Local curator charter file helpers now live here.
 
 data/
   Local generated development artifacts. This is useful for early phases, not the final production boundary.
+  Curator charter JSON files are canonical during the standalone charter phase.
 
 docs/plans/
   Roadmap and phase plans. The active phase plan should stay in sync with roadmap decisions.
@@ -98,6 +102,7 @@ The `src/domain/` layer should hold shared contracts such as:
 - status enums;
 - validation helpers;
 - parsing helpers for structured model output.
+- prompt rendering helpers for charter context.
 
 This layer should stay mostly dependency-light so it can be reused by scripts, route handlers, tests, and future jobs.
 
@@ -133,8 +138,25 @@ The `src/storage/` layer should hide persistence details.
 
 Early phases can use local JSON files. Later phases can move to SQLite or another database without forcing the curation runner, route handlers, or UI to understand the storage backend.
 
+The standalone charter capability uses local JSON files at
+`data/curators/{curator}.charter.json`. Write helpers must validate the full
+charter before replacing the existing file so malformed future provider output
+does not corrupt the canonical source of truth.
+
 ## Documentation Rules
 
 When implementing a phase plan, keep the active phase document and `docs/plans/roadmap.md` in sync if the change affects future phases.
 
 Architecture decisions that affect where future code should live should be captured here. Execution checklists and phase-specific acceptance criteria should stay in the active phase document.
+
+## Current State
+
+The repo is still in the early scaffold/spike stage:
+
+- Next.js is installed.
+- The planning docs exist.
+- The durable curation architecture has not been implemented yet, but the
+  standalone curator charter contract, mock generator, local JSON storage, and
+  canonical seed files are in place.
+- Phase 0 should still prefer the smallest terminal-to-web loop before adding
+  provider integrations, scheduling, admin surfaces, or production storage.
