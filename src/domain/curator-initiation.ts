@@ -34,6 +34,18 @@ export const OPERATOR_REVIEW_DECISIONS = [
   "accepted",
   "rejected",
 ] as const;
+export const CHARTER_REFLECTION_CHANGED_FIELDS = [
+  "galleryName",
+  "curatorialApproach",
+  "curatorialStatement",
+  "preferredMedia",
+  "guidingQuestions",
+  "selectionPrinciples",
+  "exclusions",
+  "researchOrientation",
+  "criticalVoice",
+  "version",
+] as const;
 
 export type DesignAxisValue = (typeof DESIGN_AXIS_VALUES)[number];
 export type ProvenanceVisibility = (typeof PROVENANCE_VISIBILITY_VALUES)[number];
@@ -43,6 +55,8 @@ export type DisagreementPotential =
   (typeof DISAGREEMENT_POTENTIAL_VALUES)[number];
 export type OperatorReviewDecision =
   (typeof OPERATOR_REVIEW_DECISIONS)[number];
+export type CharterReflectionChangedField =
+  (typeof CHARTER_REFLECTION_CHANGED_FIELDS)[number];
 
 export type SeedArtifact = {
   id: string;
@@ -86,6 +100,15 @@ export type TasteExerciseBehavior = {
   consistencyNotes: string[];
 };
 
+export type CharterReflection = {
+  promptVersion: string;
+  initialCharterSnapshot: CuratorCharter;
+  behaviorSummary: string;
+  revisionSummary: string;
+  preservedContradictions: string[];
+  changedFields: CharterReflectionChangedField[];
+};
+
 export type DescriptiveComparisonMetrics = {
   selectionOverlap: Record<CuratorId, number>;
   rejectionOverlap: Record<CuratorId, number>;
@@ -119,6 +142,7 @@ export type TasteProfile = {
   interview: InitiationInterview;
   seedArtifacts: SeedArtifact[];
   behavior: TasteExerciseBehavior;
+  reflection: CharterReflection;
   tasteDimensionsInferred: string[];
   descriptiveComparisonMetrics: DescriptiveComparisonMetrics;
   benchmarkMetadata: {
@@ -149,6 +173,25 @@ export function renderInitiationPrompt(curatorId: CuratorId): string {
     `curatorId must be one of: ${CURATOR_IDS.join(", ")}.`,
     `researchOrientation must be one of: ${RESEARCH_ORIENTATIONS.join(", ")}.`,
     "Do not include prose outside JSON in the charter response.",
+  ].join("\n");
+}
+
+export function renderCharterReflectionPrompt(input: {
+  curatorId: CuratorId;
+  initialCharter: CuratorCharter;
+  behavior: TasteExerciseBehavior;
+}): string {
+  return [
+    `Initiation prompt version: ${INITIATION_PROMPT_VERSION}`,
+    `Curator: ${input.curatorId}`,
+    "Reflect on the initial curator charter using the observed taste exercise behavior.",
+    "Revise the charter so future curation can use the observed selections, refusals, rankings, rationales, and tensions as durable promptable context.",
+    "Do not erase contradictions between stated taste and observed behavior; preserve them as tensions in the revised charter's principles, exclusions, or critical voice where appropriate.",
+    "Return only strict JSON matching CuratorCharter.",
+    "Initial charter JSON:",
+    JSON.stringify(input.initialCharter, null, 2),
+    "Observed taste behavior JSON:",
+    JSON.stringify(input.behavior, null, 2),
   ].join("\n");
 }
 
@@ -214,6 +257,8 @@ export function validateTasteProfile(
     validateStringArray(value.behavior, "rankings", errors);
   }
 
+  validateReflection(value, errors);
+
   validateStringArray(value, "tasteDimensionsInferred", errors);
 
   if (!isRecord(value.descriptiveComparisonMetrics)) {
@@ -235,6 +280,50 @@ export function validateTasteProfile(
   }
 
   return { ok: true, value: value as TasteProfile };
+}
+
+function validateReflection(value: Record<string, unknown>, errors: string[]): void {
+  if (!isRecord(value.reflection)) {
+    errors.push("reflection must be an object");
+    return;
+  }
+
+  validateNonEmptyString(value.reflection, "promptVersion", errors);
+  validateNonEmptyString(value.reflection, "behaviorSummary", errors);
+  validateNonEmptyString(value.reflection, "revisionSummary", errors);
+  validateNonEmptyStringArray(value.reflection, "preservedContradictions", errors);
+  validateNonEmptyStringArray(value.reflection, "changedFields", errors);
+
+  const charterValidation = validateCuratorCharter(
+    value.reflection.initialCharterSnapshot,
+  );
+  if (!charterValidation.ok) {
+    errors.push(
+      `reflection.initialCharterSnapshot must be a valid CuratorCharter: ${formatCharterValidationErrors(charterValidation.errors)}`,
+    );
+  } else if (
+    isCuratorId(value.curatorId) &&
+    charterValidation.value.curatorId !== value.curatorId
+  ) {
+    errors.push(
+      "reflection.initialCharterSnapshot.curatorId must match taste profile curatorId",
+    );
+  }
+
+  if (
+    Array.isArray(value.reflection.changedFields) &&
+    value.reflection.changedFields.some(
+      (field) =>
+        typeof field !== "string" ||
+        !CHARTER_REFLECTION_CHANGED_FIELDS.includes(
+          field as CharterReflectionChangedField,
+        ),
+    )
+  ) {
+    errors.push(
+      `reflection.changedFields must contain only: ${CHARTER_REFLECTION_CHANGED_FIELDS.join(", ")}`,
+    );
+  }
 }
 
 export function isAcceptedTasteProfile(
@@ -292,5 +381,21 @@ function validateStringArray(
     (value[field] as unknown[]).some((item) => typeof item !== "string")
   ) {
     errors.push(`${field} must be a string array`);
+  }
+}
+
+function validateNonEmptyStringArray(
+  value: Record<string, unknown>,
+  field: string,
+  errors: string[],
+): void {
+  if (
+    !Array.isArray(value[field]) ||
+    (value[field] as unknown[]).length === 0 ||
+    (value[field] as unknown[]).some(
+      (item) => typeof item !== "string" || item.trim().length === 0,
+    )
+  ) {
+    errors.push(`${field} must be a non-empty string array`);
   }
 }

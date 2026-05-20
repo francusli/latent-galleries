@@ -202,6 +202,11 @@ describe("curator charter files", () => {
     assert.equal(fixtureAfter, fixtureBefore);
     assert.equal(JSON.parse(draftRaw).curatorId, "gpt");
     assert.equal(JSON.parse(profileRaw).operatorReview.decision, "pending");
+    assert.ok(
+      JSON.parse(profileRaw).reflection.changedFields.includes(
+        "selectionPrinciples",
+      ),
+    );
   });
 
   it("prefers the latest reviewed dated charter with undated fallback", async () => {
@@ -246,6 +251,7 @@ describe("curator charter files", () => {
       path.join(baseDir, "data", "curators", "2026-05-19.claude.charter.json"),
     );
     assert.equal(loaded?.galleryName, "Reviewed Claude Gallery");
+    assert.match(loaded?.curatorialStatement ?? "", /working memory/);
   });
 
   it("rejects reviewed charter writes without an accepted taste profile", async () => {

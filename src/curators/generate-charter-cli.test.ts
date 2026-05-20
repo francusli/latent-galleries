@@ -72,6 +72,11 @@ describe("generate-charter CLI", () => {
 
     assert.equal(validateCuratorCharter(JSON.parse(draftRaw)).ok, true);
     assert.equal(JSON.parse(profileRaw).curatorId, "gpt");
+    assert.ok(
+      JSON.parse(profileRaw).reflection.changedFields.includes(
+        "curatorialStatement",
+      ),
+    );
     await assert.rejects(readFile(getCuratorCharterPath("gpt", { baseDir }), "utf8"));
   });
 

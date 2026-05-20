@@ -45,11 +45,15 @@ docs/plans/README.md
 docs/plans/phase-0-terminal-to-web-spike.md
   Active Phase 0 execution plan.
 
-docs/plans/standalone-curator-charter.md
+docs/plans/feature-curator-charters.md
   Plan for durable curator identity and charter generation.
 
-docs/plans/curator-initiation-ritual.md
+docs/plans/feature-curator-initiation-ritual.md
   Plan for provider-backed initial gallery identity generation.
+
+docs/plans/research-internet-native-taste-seed-pack.md
+  Plan for replacing the fictional v0 seed pack with a real, broad
+  internet-native initiation fixture.
 
 app/
   Current Next.js app route surface.
@@ -68,18 +72,20 @@ src/domain/curator-charter.ts
   Shared curator charter types, constants, validation, and prompt rendering.
 
 src/domain/curator-initiation.ts
-  Initiation prompt constants, seed-pack/taste-profile types, validation, and
-  accepted-review checks.
+  Initiation and reflection prompt constants, seed-pack/taste-profile types,
+  validation, and accepted-review checks.
 
 src/curators/initiation.ts
-  Initiation adapter contract and local deterministic initiation runner. Real
-  provider adapters still need concrete API integrations.
+  Initiation adapter contract and local deterministic initiation runner. The
+  runner now reflects on seed behavior and returns the revised charter as the
+  draft candidate. Real provider adapters still need concrete API integrations.
 
 src/curators/mock-charters.ts
   Deterministic seed charter identities for GPT, Claude, Gemini, and Grok.
 
 src/curators/taste-seed-pack.ts
-  V0 hand-audited artifact seed pack for taste-profile exercises.
+  V0 placeholder artifact seed pack for taste-profile exercises. Future real
+  seed-pack data should move toward `data/seed-packs/`.
 
 src/storage/curator-charter-files.ts
   Local JSON read/write helpers for canonical, draft, taste-profile, and
@@ -89,8 +95,10 @@ data/curators/*.charter.json
   Canonical undated fixture charters plus any accepted dated reviewed charters.
 
 data/curators/drafts/*.json
-  Reviewable generated initiation drafts and taste profiles. These are generated
-  artifacts and should not replace undated fixtures.
+  Reviewable generated initiation drafts and taste profiles. Draft charters are
+  post-reflection revisions, while taste profiles preserve the initial charter
+  snapshot and reflection evidence. These generated artifacts should not replace
+  undated fixtures.
 ```
 
 ## Current Commands

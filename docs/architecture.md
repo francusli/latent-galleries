@@ -48,6 +48,8 @@ src/storage/
 data/
   Local generated development artifacts. This is useful for early phases, not the final production boundary.
   Curator charter JSON files are canonical during the standalone charter phase.
+  Real versioned seed-pack fixtures should live under `data/seed-packs/` once
+  the fictional v0 taste seed pack is replaced.
 
 docs/plans/
   Roadmap and phase plans. The active phase plan should stay in sync with roadmap decisions.
@@ -154,6 +156,11 @@ data/curators/drafts/{curator}.charter.draft.json
 data/curators/drafts/{curator}.taste-profile.json
 ```
 
+The draft charter is the post-reflection charter: initiation records the
+curator's initial charter snapshot, seed-pack behavior, reflection rationale,
+preserved contradictions, and changed charter fields in the taste profile before
+human review. The initial self-description is evidence, not the promoted draft.
+
 Reviewed provider-backed charters are date-prefixed siblings of the undated
 fixtures:
 
@@ -162,15 +169,28 @@ data/curators/{YYYY-MM-DD}.{curator}.charter.json
 ```
 
 Charter reads prefer the latest dated reviewed charter and fall back to the
-undated fixture. Promotion to a reviewed charter requires a valid charter and an
-accepted taste profile with structured review fields; draft generation and
-taste-profile writes must not overwrite undated fixtures.
+undated fixture. Promotion to a reviewed charter requires a valid reflected
+charter and an accepted taste profile with structured review fields; draft
+generation and taste-profile writes must not overwrite undated fixtures.
 
 ## Documentation Rules
 
-When implementing a phase plan, keep the active phase document and `docs/plans/roadmap.md` in sync if the change affects future phases.
+Keep docs synchronized selectively:
 
-Architecture decisions that affect where future code should live should be captured here. Execution checklists and phase-specific acceptance criteria should stay in the active phase document.
+- Capture module boundaries, storage locations, data flow, and durable structural
+  decisions in this architecture doc.
+- Capture repo navigation changes in `docs/project-map.md` when files or
+  directories are added, removed, renamed, or meaningfully repurposed.
+- Capture phase scope, sequencing, acceptance criteria, and future
+  implementation expectations in the active phase plan and
+  `docs/plans/roadmap.md`.
+- Do not update every doc by default for local refactors, copy edits, or small
+  implementation details that code and tests already explain.
+
+When implementation makes planned or future guidance real, rewrite stale
+"future" language into current-state guidance, mark completed plans
+`Implemented`, and prune checklists down to decisions and caveats that still
+help future agents.
 
 ## Current State
 
@@ -180,7 +200,7 @@ The repo is still in the early scaffold/spike stage:
 - The planning docs exist.
 - The durable curation architecture has not been implemented yet, but the
   standalone curator charter contract, mock generator, local JSON storage,
-  initiation draft/taste-profile storage, reviewed-charter promotion helper, and
-  canonical seed files are in place.
+  initiation draft/taste-profile storage, first-class charter reflection,
+  reviewed-charter promotion helper, and canonical seed files are in place.
 - Phase 0 should still prefer the smallest terminal-to-web loop before adding
   provider integrations, scheduling, admin surfaces, or production storage.

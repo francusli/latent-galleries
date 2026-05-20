@@ -26,26 +26,36 @@ The charter schema intentionally uses art-facing field names:
 names as the structured output contract.
 
 The initiation ritual described in
-`docs/plans/curator-initiation-ritual.md` now has a local scaffold: versioned
+`docs/plans/feature-curator-initiation-ritual.md` now has a local scaffold: versioned
 initiation prompts, a v0 seed pack, taste-profile records, draft storage under
 `data/curators/drafts/`, accepted-review gating, reviewed-charter promotion to
 `data/curators/{YYYY-MM-DD}.{curator}.charter.json`, and loader behavior that
 prefers the latest dated reviewed charter before falling back to the undated
-fixture. The command
+fixture. The local initiation runner now includes a first-class reflection step:
+the saved draft charter is the post-reflection revision, and the taste profile
+preserves the initial charter snapshot, observed behavior, reflection rationale,
+preserved contradictions, and changed fields. The command
 `npm run generate-charter -- --curator gpt --draft --taste-profile` writes
 reviewable local initiation artifacts without changing fixtures.
+
+`docs/plans/research-internet-native-taste-seed-pack.md` defines the next
+seed-pack step: replace the fictional v0 pack with a real, versioned,
+hand-audited v1 fixture across broad internet-native artifacts. The pack is for
+controlled initiation and comparison only; future daily curation should source
+broadly through search instead of drawing from the fixed seed pack.
 
 Future work should add concrete provider adapters for GPT first, then Claude,
 Gemini, and Grok. Each real model should generate its own draft starting charter
 through the same schema, answer the taste interview, then run against the shared
 artifact and image seed pack with pairwise, ranking, exclusion, visual
-diagnosis, blind visual comparison, taste-boundary, and repeat-trial tasks. Keep
-the undated fixtures stable, preserve versioned prompts, seed packs, model
-metadata, modality inputs, choices, rationales, contradiction notes,
+diagnosis, blind visual comparison, taste-boundary, and repeat-trial tasks, then
+revise its charter from that observed behavior before human review. Keep the
+undated fixtures stable, preserve versioned prompts, seed packs, model metadata,
+modality inputs, choices, rationales, reflection notes, contradiction notes,
 descriptive comparison metrics, and structured human review fields. Treat the
 current local taste-profile behavior and metrics as deterministic placeholders
-until those provider-backed exercises exist, and only promote a draft after an
-accepted human review from the same curator's taste profile.
+until those provider-backed exercises exist, and only promote a reflected draft
+after an accepted human review from the same curator's taste profile.
 
 ## Phase 0: Terminal-To-Web Spike
 

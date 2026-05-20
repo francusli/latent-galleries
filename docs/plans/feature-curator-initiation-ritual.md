@@ -18,6 +18,16 @@ come from both a taste interview and controlled artifact exercises, so the
 project starts with a usable curatorial point of view while preserving evidence
 that could later become part of a benchmark environment.
 
+The initiation loop is explicitly reflective:
+
+```txt
+interview -> artifact exercises -> self-revision -> human review -> promotion
+```
+
+The draft charter saved for review is the post-reflection charter. The taste
+profile preserves the initial charter snapshot, observed behavior, reflection
+rationale, preserved contradictions, and fields changed during revision.
+
 ## Scope
 
 In scope:
@@ -30,6 +40,8 @@ In scope:
   profile before open-ended curation begins.
 - Taste-profile records that preserve enough inputs, choices, rationales, and
   repeat trials to support future benchmark design.
+- A first-class self-reflection step where the curator revises its own charter
+  from observed seed-pack behavior before human review.
 - Human review before any draft becomes a dated reviewed charter.
 - Mock charters preserved as deterministic fixtures for tests and local
   development.
@@ -82,6 +94,9 @@ npm run generate-charter -- --all
   signals that together seed the curator's initial taste profile.
 - Treat the initial charter as provisional self-description until artifact
   behavior either supports, complicates, or contradicts it.
+- Treat the reflected charter as the draft candidate for review; do not promote
+  an initial self-description that has not been reconciled with observed
+  behavior.
 - Use repeated selections, rankings, exclusions, and rationales to observe taste
   behavior, not to pretend the system has proven a model's inner preferences.
 - Preserve benchmark-shaped data from the beginning: stable prompts, stable seed
@@ -173,7 +188,7 @@ mock generator. The harness should:
 - write only valid drafts;
 - fail clearly without replacing existing undated fixture charters.
 
-The initiation should have three stages:
+The initiation should have four stages:
 
 1. Taste interview: ask the model to found an autonomous digital gallery before
    any artifacts have been selected. The prompt should emphasize model-native
@@ -183,7 +198,11 @@ The initiation should have three stages:
 2. Artifact exercises: show the model controlled image and artifact candidates,
    then ask it to choose, rank, reject, compare, and explain. Save this as
    observed taste behavior.
-3. Charter synthesis: create or revise the draft charter from both the
+3. Charter reflection: feed the model its initial charter and observed behavior,
+   then ask it to revise the charter without erasing contradictions. Save the
+   initial charter snapshot, behavior summary, revision summary, preserved
+   contradictions, and changed charter fields in the taste profile.
+4. Charter synthesis: write the post-reflection draft charter from both the
    provisional self-description and observed taste behavior. Preserve
    contradictions as notes instead of silently smoothing them away.
 
@@ -206,9 +225,13 @@ behavior, then create a starting profile that can move forward into real
 curation.
 
 Start with a small v0 seed pack of 24-36 hand-audited candidates before building
-a larger benchmark-style pack. Later packs can grow to 40-100 artifacts across
-images, essays, tools, datasets, websites, games, net-art, archives,
-screenshots, and deliberately weak candidates.
+a larger benchmark-style pack. The real v1 pack should follow
+`docs/plans/research-internet-native-taste-seed-pack.md`: broad internet-native material
+from music, posts, images, tools, games, websites, datasets, archives,
+screenshots, social threads where stable enough to review, and deliberately
+weak candidates. Stable archives such as Rhizome, CreativeApplications.Net,
+Internet Archive, and Webrecorder are useful source lanes, but they should not
+define the whole candidate universe.
 
 Each seed pack should declare its design axes up front:
 
@@ -298,6 +321,8 @@ Taste profile output should record:
 - rationales;
 - modality inputs shown to the model;
 - taste dimensions inferred from behavior;
+- reflection metadata, including the initial charter snapshot, behavior summary,
+  revision summary, preserved contradictions, and changed charter fields;
 - signature attractions and signature refusals;
 - observed tensions between charter claims and choices;
 - descriptive comparison metrics;
@@ -341,6 +366,8 @@ A generated charter can be written as a dated reviewed charter only when:
 - the JSON validates against `CuratorCharter`;
 - the taste profile contains both interview answers and artifact exercise
   behavior;
+- the taste profile contains reflection evidence and the draft charter is the
+  post-reflection revision;
 - descriptive comparison metrics show enough distinction from the other curators
   to justify a separate gallery identity;
 - rationales refer to the charter's stated principles without becoming generic;
@@ -369,6 +396,8 @@ charters later if a run should not remain in the curator's lineage.
 - [x] Add taste-profile run storage under `data/curators/drafts/`.
 - [ ] Implement pairwise, ranking, exclusion, visual diagnosis, blind visual
       comparison, taste-boundary, and repeat-trial tasks.
+- [x] Add a first-class charter reflection step that revises the draft charter
+      from observed behavior before human review.
 - [x] Scaffold benchmark metadata on taste-profile runs.
 - [x] Add structured human review fields to taste-profile records.
 - [x] Add an automatic reviewed-charter write from accepted draft plus taste
@@ -388,8 +417,8 @@ charters later if a run should not remain in the curator's lineage.
   for each curator.
 - Taste-profile output is saved and reviewable.
 - Taste-profile output includes declared claims, observed choices,
-  contradiction notes, descriptive comparison metrics, modality inputs, and
-  structured human review fields.
+  reflection evidence, contradiction notes, descriptive comparison metrics,
+  modality inputs, and structured human review fields.
 - Reviewed charter writes require schema validity, accepted taste-profile
   behavior, descriptive distinctiveness, contradiction review, and human review.
 - Undated charters remain stable when generation, taste-profile runs, or

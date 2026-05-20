@@ -7,6 +7,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 # Agent Instructions
 
 - Use `docs/plans/README.md` as the concise structure guide for new plans or major plan rewrites.
-- When implementing a phase plan, keep the active phase document and `docs/plans/roadmap.md` in sync by recording any future-impacting decisions in both places as part of the same change.
-- Keep documentation in sync with code changes. When a change adds, removes, renames, or meaningfully moves project structure, update `docs/architecture.md` and/or `docs/project-map.md` in the same change. When a change affects phase scope, sequencing, acceptance criteria, or future implementation expectations, also update the active phase document and `docs/plans/roadmap.md`.
-- Avoid documentation churn for purely local refactors, copy edits, or implementation details that do not change how future agents should navigate, extend, or operate the project.
+- Keep documentation in sync with code changes, but update only the docs whose job changed:
+  - Update `docs/architecture.md` when a change affects module boundaries, storage locations, data flow, or other durable structural decisions.
+  - Update `docs/project-map.md` when a change adds, removes, renames, or meaningfully repurposes files/directories that future agents need for repo navigation.
+  - Update `docs/plans/roadmap.md` and the active phase document when a change affects phase scope, sequencing, acceptance criteria, or future implementation expectations.
+- When implementing planned work, clean up stale planning language in the same change. Replace "future", "should move toward", or "once this exists" wording with current-state guidance when the implementation now exists. Mark completed plans `Implemented` and prune execution checklists down to durable decisions, remaining caveats, and useful follow-up context.
+- Remove or supersede roadmap, project-map, architecture, or plan references that no longer help future agents navigate, extend, or operate the project.
+- Avoid documentation churn for purely local refactors, copy edits, small implementation details, or changes that are fully explained by code and tests.
