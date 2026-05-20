@@ -26,21 +26,24 @@ scripts/
 
 src/domain/
   Shared domain types, constants, validation, and parsing.
-  Curator charter contracts and prompt rendering now live here.
+  Curator charter contracts, initiation prompt contracts, taste-profile
+  validation, and prompt rendering now live here.
 
 src/curation/
   Curation runner and workflow orchestration.
 
 src/curators/
   Curator adapter interface plus provider-specific adapters for GPT, Claude, Gemini, and Grok.
-  Deterministic mock curator charter profiles now live here.
+  Deterministic mock curator charter profiles, initiation adapter contracts, and
+  the v0 taste seed pack now live here.
 
 src/search/
   Search service interface plus mock and real search provider implementations.
 
 src/storage/
   Storage interface and implementations, starting with local JSON and later moving to SQLite or another database.
-  Local curator charter file helpers now live here.
+  Local curator charter, draft charter, taste-profile, and reviewed-charter file
+  helpers now live here.
 
 data/
   Local generated development artifacts. This is useful for early phases, not the final production boundary.
@@ -143,6 +146,26 @@ The standalone charter capability uses local JSON files at
 charter before replacing the existing file so malformed future provider output
 does not corrupt the canonical source of truth.
 
+The initiation ritual writes provisional outputs under
+`data/curators/drafts/`:
+
+```txt
+data/curators/drafts/{curator}.charter.draft.json
+data/curators/drafts/{curator}.taste-profile.json
+```
+
+Reviewed provider-backed charters are date-prefixed siblings of the undated
+fixtures:
+
+```txt
+data/curators/{YYYY-MM-DD}.{curator}.charter.json
+```
+
+Charter reads prefer the latest dated reviewed charter and fall back to the
+undated fixture. Promotion to a reviewed charter requires a valid charter and an
+accepted taste profile with structured review fields; draft generation and
+taste-profile writes must not overwrite undated fixtures.
+
 ## Documentation Rules
 
 When implementing a phase plan, keep the active phase document and `docs/plans/roadmap.md` in sync if the change affects future phases.
@@ -156,7 +179,8 @@ The repo is still in the early scaffold/spike stage:
 - Next.js is installed.
 - The planning docs exist.
 - The durable curation architecture has not been implemented yet, but the
-  standalone curator charter contract, mock generator, local JSON storage, and
+  standalone curator charter contract, mock generator, local JSON storage,
+  initiation draft/taste-profile storage, reviewed-charter promotion helper, and
   canonical seed files are in place.
 - Phase 0 should still prefer the smallest terminal-to-web loop before adding
   provider integrations, scheduling, admin surfaces, or production storage.

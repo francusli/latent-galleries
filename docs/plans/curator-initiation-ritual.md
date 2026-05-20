@@ -2,7 +2,7 @@
 
 ## Status
 
-Planned
+Active
 
 ## Intent
 
@@ -131,6 +131,16 @@ Provider-backed initiation should write drafts only:
 npm run generate-charter -- --curator gpt --provider real --draft
 npm run generate-charter -- --all --provider real --draft
 ```
+
+The local scaffold also supports deterministic reviewable initiation artifacts:
+
+```sh
+npm run generate-charter -- --curator gpt --draft --taste-profile
+npm run generate-charter -- --all --draft --taste-profile
+```
+
+The `--provider real` flag is reserved for concrete provider adapters and fails
+clearly until those adapters and credentials are added.
 
 Draft outputs should live under a clearly separate path:
 
@@ -349,25 +359,25 @@ charters later if a run should not remain in the curator's lineage.
 
 ## Steps
 
-- [ ] Draft the shared taste interview prompt.
-- [ ] Define the v0 evaluation frame and descriptive metrics.
-- [ ] Define the provider-backed charter generator interface.
-- [ ] Add draft charter file helpers.
+- [x] Scaffold the shared taste interview prompt.
+- [x] Scaffold the v0 evaluation frame and descriptive metrics.
+- [x] Define the initiation adapter contract.
+- [x] Add draft charter file helpers.
 - [ ] Add one real adapter first, likely GPT.
-- [ ] Validate generated drafts against `CuratorCharter`.
-- [ ] Add a shared artifact and image seed pack format with declared design axes.
-- [ ] Add taste-profile run storage under `data/curators/drafts/`.
+- [x] Validate generated drafts against `CuratorCharter`.
+- [x] Add a shared artifact and image seed pack format with declared design axes.
+- [x] Add taste-profile run storage under `data/curators/drafts/`.
 - [ ] Implement pairwise, ranking, exclusion, visual diagnosis, blind visual
       comparison, taste-boundary, and repeat-trial tasks.
-- [ ] Add benchmark metadata to each taste-profile run.
-- [ ] Add structured human review fields to taste-profile records.
-- [ ] Add an automatic reviewed-charter write from accepted draft plus taste
+- [x] Scaffold benchmark metadata on taste-profile runs.
+- [x] Add structured human review fields to taste-profile records.
+- [x] Add an automatic reviewed-charter write from accepted draft plus taste
       profile to a date-prefixed charter file.
-- [ ] Update charter loading to prefer the latest dated reviewed charter and
+- [x] Update charter loading to prefer the latest dated reviewed charter and
       fall back to the undated fixture.
 - [ ] Repeat the same initiation and taste exercise ritual for Claude, Gemini, and
       Grok.
-- [ ] Update tests to keep mock, real-generation, and taste-profile paths
+- [x] Update tests to keep mock, real-generation, and taste-profile paths
       separate.
 
 ## Done When
@@ -394,6 +404,13 @@ structured way to initialize a taste hypothesis. The artifact and image
 exercises provide the stronger signal by observing repeated choices under
 controlled conditions, while preserving the raw material needed for a future
 benchmark environment.
+
+Implementation note: the first scaffold keeps real provider calls out of the
+mock path. Local draft and taste-profile generation is deterministic and
+reviewable, but the current taste-profile behavior and metrics are placeholders
+for exercising storage and review flow. `--provider real` currently fails with a
+configuration error until concrete GPT/Claude/Gemini/Grok adapters and real
+taste-exercise tasks are added.
 
 Useful references for future design:
 

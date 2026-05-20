@@ -61,19 +61,36 @@ package.json
   Scripts and dependencies.
 
 scripts/generate-charter.ts
-  Terminal entrypoint for deterministic standalone curator charter generation.
+  Terminal entrypoint for deterministic standalone curator charter generation
+  and local initiation draft/taste-profile generation.
 
 src/domain/curator-charter.ts
   Shared curator charter types, constants, validation, and prompt rendering.
 
+src/domain/curator-initiation.ts
+  Initiation prompt constants, seed-pack/taste-profile types, validation, and
+  accepted-review checks.
+
+src/curators/initiation.ts
+  Initiation adapter contract and local deterministic initiation runner. Real
+  provider adapters still need concrete API integrations.
+
 src/curators/mock-charters.ts
   Deterministic seed charter identities for GPT, Claude, Gemini, and Grok.
 
+src/curators/taste-seed-pack.ts
+  V0 hand-audited artifact seed pack for taste-profile exercises.
+
 src/storage/curator-charter-files.ts
-  Local JSON read/write helpers for canonical charter files.
+  Local JSON read/write helpers for canonical, draft, taste-profile, and
+  reviewed charter files.
 
 data/curators/*.charter.json
-  Canonical generated charter JSON files for each curator.
+  Canonical undated fixture charters plus any accepted dated reviewed charters.
+
+data/curators/drafts/*.json
+  Reviewable generated initiation drafts and taste profiles. These are generated
+  artifacts and should not replace undated fixtures.
 ```
 
 ## Current Commands
@@ -87,6 +104,7 @@ npm run typecheck
 npm run test
 npm run generate-charter -- --curator gpt
 npm run generate-charter -- --all
+npm run generate-charter -- --curator gpt --draft --taste-profile
 ```
 
 Phase-specific scripts such as `npm run mock-curation -- --exhibit gpt` should be added when Phase 0 is implemented.

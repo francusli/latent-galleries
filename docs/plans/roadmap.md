@@ -25,24 +25,27 @@ The charter schema intentionally uses art-facing field names:
 `criticalVoice`. Future provider-backed charter generation should keep those
 names as the structured output contract.
 
-Before fixed-candidate or search-backed curation runs, add the initiation ritual
-described in `docs/plans/curator-initiation-ritual.md`: each real model should
-generate its own draft starting charter through the same schema, answer a taste
-interview, then run against a shared artifact and image seed pack with pairwise,
-ranking, exclusion, visual diagnosis, blind visual comparison, taste-boundary,
-and repeat-trial tasks. Treat the draft charter as provisional self-description
-until observed artifact behavior supports, complicates, or contradicts it.
-Start with one provider and a small hand-audited v0 seed pack, then expand only
-after the descriptive evaluation frame is useful. Preserve versioned prompts,
-seed packs, model metadata, modality inputs, choices, rationales, contradiction
-notes, descriptive comparison metrics, and structured human review fields so
-this initiation work can later inform a benchmark environment without becoming
-the final benchmark prematurely. After schema validation, accepted taste-profile
-behavior, descriptive distinctiveness from the other curators, and human review,
-automatically write the accepted draft as
-`data/curators/{YYYY-MM-DD}.{curator}.charter.json`. Keep the undated fixtures
-stable, load the latest dated reviewed charter by default, and let operators
-manually cull dated reviewed charters later.
+The initiation ritual described in
+`docs/plans/curator-initiation-ritual.md` now has a local scaffold: versioned
+initiation prompts, a v0 seed pack, taste-profile records, draft storage under
+`data/curators/drafts/`, accepted-review gating, reviewed-charter promotion to
+`data/curators/{YYYY-MM-DD}.{curator}.charter.json`, and loader behavior that
+prefers the latest dated reviewed charter before falling back to the undated
+fixture. The command
+`npm run generate-charter -- --curator gpt --draft --taste-profile` writes
+reviewable local initiation artifacts without changing fixtures.
+
+Future work should add concrete provider adapters for GPT first, then Claude,
+Gemini, and Grok. Each real model should generate its own draft starting charter
+through the same schema, answer the taste interview, then run against the shared
+artifact and image seed pack with pairwise, ranking, exclusion, visual
+diagnosis, blind visual comparison, taste-boundary, and repeat-trial tasks. Keep
+the undated fixtures stable, preserve versioned prompts, seed packs, model
+metadata, modality inputs, choices, rationales, contradiction notes,
+descriptive comparison metrics, and structured human review fields. Treat the
+current local taste-profile behavior and metrics as deterministic placeholders
+until those provider-backed exercises exist, and only promote a draft after an
+accepted human review from the same curator's taste profile.
 
 ## Phase 0: Terminal-To-Web Spike
 

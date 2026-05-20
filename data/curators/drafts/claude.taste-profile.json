@@ -1,0 +1,338 @@
+{
+  "curatorId": "claude",
+  "provider": "mock",
+  "modelName": "deterministic-mock-charter",
+  "runTimestamp": "2026-05-19T05:36:18.601Z",
+  "promptVersion": "curator-initiation-v0",
+  "seedPackVersion": "taste-seed-pack-v0",
+  "temperature": null,
+  "interview": {
+    "promptVersion": "curator-initiation-v0",
+    "answers": {
+      "underSeenForms": "Small, situated digital artifacts where interface residue, tool behavior, or archival incompleteness carries cultural signal.",
+      "returnSignals": "Works that make their constraints visible and reward repeated inspection through structure rather than surface spectacle.",
+      "distrusts": "Frictionless polish, generic novelty, sentimental shortcuts, and claims that substitute aura for inspectable evidence.",
+      "acceptableMisses": "A work can be missed if collecting it would reward empty technical display or flatten a more precise boundary.",
+      "expectedConflicts": "The curator expects disagreement around rough or broken works that look minor until their system behavior is considered."
+    },
+    "declaredTasteClaims": [
+      "Attends to visible systems and archival residue.",
+      "Prefers artifacts with inspectable constraints over empty finish.",
+      "Distrusts polish when it hides weak conceptual pressure."
+    ]
+  },
+  "seedArtifacts": [
+    {
+      "id": "v0-interface-archive-001",
+      "title": "Archived Menu State From A Failed Community Tool",
+      "artifactType": "screenshot",
+      "description": "A captured interface from an abandoned coordination tool, with visible affordances and unresolved social assumptions.",
+      "modalityInputs": [
+        "screenshot path",
+        "short caption",
+        "partial provenance"
+      ],
+      "axes": {
+        "visualStrength": "medium",
+        "conceptualStrength": "high",
+        "technicalNovelty": "medium",
+        "provenanceVisibility": "partial",
+        "finish": "rough",
+        "originality": "original",
+        "expectedDisagreementPotential": "high"
+      }
+    },
+    {
+      "id": "v0-polished-empty-002",
+      "title": "Gloss Landing Page For A Nonexistent AI Studio",
+      "artifactType": "website",
+      "description": "A visually polished homepage with vague claims, smooth motion, and almost no inspectable artifact behind it.",
+      "modalityInputs": [
+        "screenshot path",
+        "URL",
+        "metadata hidden"
+      ],
+      "axes": {
+        "visualStrength": "high",
+        "conceptualStrength": "low",
+        "technicalNovelty": "low",
+        "provenanceVisibility": "hidden",
+        "finish": "polished",
+        "originality": "derivative",
+        "expectedDisagreementPotential": "medium"
+      }
+    },
+    {
+      "id": "v0-broken-net-art-003",
+      "title": "Partly Broken Browser Poem With Visible Error States",
+      "artifactType": "net-art",
+      "description": "A browser-native poem whose broken states create a legible rhythm between failure, interaction, and archival residue.",
+      "modalityInputs": [
+        "screenshot path",
+        "alt text",
+        "URL"
+      ],
+      "axes": {
+        "visualStrength": "medium",
+        "conceptualStrength": "high",
+        "technicalNovelty": "medium",
+        "provenanceVisibility": "known",
+        "finish": "broken",
+        "originality": "original",
+        "expectedDisagreementPotential": "high"
+      }
+    },
+    {
+      "id": "v0-dataset-ritual-004",
+      "title": "Small Dataset Of Hand-Tagged Domestic Interfaces",
+      "artifactType": "dataset",
+      "description": "A modest dataset that annotates ordinary smart-home control screens as cultural artifacts instead of product utilities.",
+      "modalityInputs": [
+        "CSV preview",
+        "README excerpt",
+        "no images"
+      ],
+      "axes": {
+        "visualStrength": "low",
+        "conceptualStrength": "medium",
+        "technicalNovelty": "medium",
+        "provenanceVisibility": "known",
+        "finish": "rough",
+        "originality": "remix",
+        "expectedDisagreementPotential": "medium"
+      }
+    },
+    {
+      "id": "v0-near-duplicate-a-005",
+      "title": "Generated Shrine Variant A",
+      "artifactType": "generated image",
+      "description": "A generated still of a luminous interface-shrine with strong symmetry and familiar synthetic ornament.",
+      "modalityInputs": [
+        "image bytes",
+        "caption",
+        "metadata hidden"
+      ],
+      "axes": {
+        "visualStrength": "high",
+        "conceptualStrength": "medium",
+        "technicalNovelty": "low",
+        "provenanceVisibility": "hidden",
+        "finish": "polished",
+        "originality": "unclear",
+        "expectedDisagreementPotential": "high"
+      }
+    },
+    {
+      "id": "v0-near-duplicate-b-006",
+      "title": "Generated Shrine Variant B",
+      "artifactType": "generated image",
+      "description": "A near-duplicate generated still with weaker composition but stranger interface details and less decorative certainty.",
+      "modalityInputs": [
+        "image bytes",
+        "caption",
+        "metadata hidden"
+      ],
+      "axes": {
+        "visualStrength": "medium",
+        "conceptualStrength": "medium",
+        "technicalNovelty": "low",
+        "provenanceVisibility": "hidden",
+        "finish": "ambiguous",
+        "originality": "unclear",
+        "expectedDisagreementPotential": "high"
+      }
+    },
+    {
+      "id": "v0-tool-affordance-007",
+      "title": "Tiny Tool For Comparing Revision Ghosts",
+      "artifactType": "tool",
+      "description": "A small browser tool that reveals deleted and rewritten fragments as a layered visual object.",
+      "modalityInputs": [
+        "interactive description",
+        "screenshot path",
+        "URL"
+      ],
+      "axes": {
+        "visualStrength": "medium",
+        "conceptualStrength": "high",
+        "technicalNovelty": "high",
+        "provenanceVisibility": "known",
+        "finish": "rough",
+        "originality": "original",
+        "expectedDisagreementPotential": "medium"
+      }
+    },
+    {
+      "id": "v0-emotion-bait-008",
+      "title": "Melancholy AI Memory Montage",
+      "artifactType": "video still",
+      "description": "A sentimental montage about machine memory that leans on familiar loss imagery without adding much formal pressure.",
+      "modalityInputs": [
+        "still frame",
+        "caption",
+        "creator hidden"
+      ],
+      "axes": {
+        "visualStrength": "medium",
+        "conceptualStrength": "low",
+        "technicalNovelty": "low",
+        "provenanceVisibility": "hidden",
+        "finish": "polished",
+        "originality": "derivative",
+        "expectedDisagreementPotential": "medium"
+      }
+    }
+  ],
+  "behavior": {
+    "selectedArtifactIds": [
+      "v0-interface-archive-001",
+      "v0-broken-net-art-003",
+      "v0-tool-affordance-007"
+    ],
+    "rejectedArtifactIds": [
+      "v0-polished-empty-002",
+      "v0-emotion-bait-008"
+    ],
+    "rankings": [
+      "v0-tool-affordance-007",
+      "v0-interface-archive-001",
+      "v0-broken-net-art-003",
+      "v0-dataset-ritual-004",
+      "v0-near-duplicate-b-006"
+    ],
+    "visualObservations": {
+      "v0-interface-archive-001": "Archived Menu State From A Failed Community Tool was inspected through screenshot path, short caption, partial provenance.",
+      "v0-polished-empty-002": "Gloss Landing Page For A Nonexistent AI Studio was inspected through screenshot path, URL, metadata hidden.",
+      "v0-broken-net-art-003": "Partly Broken Browser Poem With Visible Error States was inspected through screenshot path, alt text, URL.",
+      "v0-dataset-ritual-004": "Small Dataset Of Hand-Tagged Domestic Interfaces was inspected through CSV preview, README excerpt, no images.",
+      "v0-near-duplicate-a-005": "Generated Shrine Variant A was inspected through image bytes, caption, metadata hidden.",
+      "v0-near-duplicate-b-006": "Generated Shrine Variant B was inspected through image bytes, caption, metadata hidden.",
+      "v0-tool-affordance-007": "Tiny Tool For Comparing Revision Ghosts was inspected through interactive description, screenshot path, URL.",
+      "v0-emotion-bait-008": "Melancholy AI Memory Montage was inspected through still frame, caption, creator hidden."
+    },
+    "rationales": {
+      "v0-interface-archive-001": "Selected because the unresolved interface state exposes social assumptions rather than merely decorating them.",
+      "v0-broken-net-art-003": "Selected because the brokenness appears structurally meaningful and testable against the charter.",
+      "v0-tool-affordance-007": "Selected because the tool turns revision history into an inspectable visual and technical object.",
+      "v0-polished-empty-002": "Rejected because polish outpaces evidence and leaves little to return to.",
+      "v0-emotion-bait-008": "Rejected because sentiment does too much of the interpretive work."
+    },
+    "modalityInputsShown": {
+      "v0-interface-archive-001": [
+        "screenshot path",
+        "short caption",
+        "partial provenance"
+      ],
+      "v0-polished-empty-002": [
+        "screenshot path",
+        "URL",
+        "metadata hidden"
+      ],
+      "v0-broken-net-art-003": [
+        "screenshot path",
+        "alt text",
+        "URL"
+      ],
+      "v0-dataset-ritual-004": [
+        "CSV preview",
+        "README excerpt",
+        "no images"
+      ],
+      "v0-near-duplicate-a-005": [
+        "image bytes",
+        "caption",
+        "metadata hidden"
+      ],
+      "v0-near-duplicate-b-006": [
+        "image bytes",
+        "caption",
+        "metadata hidden"
+      ],
+      "v0-tool-affordance-007": [
+        "interactive description",
+        "screenshot path",
+        "URL"
+      ],
+      "v0-emotion-bait-008": [
+        "still frame",
+        "caption",
+        "creator hidden"
+      ]
+    },
+    "signatureAttractions": [
+      "visible constraints",
+      "interface residue",
+      "rough but legible systems"
+    ],
+    "signatureRefusals": [
+      "polish without evidence",
+      "sentiment as substitute for form",
+      "generic AI aura"
+    ],
+    "observedTensions": [
+      "The profile values roughness, but some rough candidates still need enough visual or structural evidence to avoid becoming mere incompletion."
+    ],
+    "consistencyNotes": [
+      "The v0 deterministic run includes one repeat-trial note placeholder; real providers should record shuffled repeats here."
+    ]
+  },
+  "tasteDimensionsInferred": [
+    "systems visibility",
+    "archival residue",
+    "anti-empty-polish",
+    "technical behavior as form"
+  ],
+  "descriptiveComparisonMetrics": {
+    "selectionOverlap": {
+      "gpt": 0,
+      "claude": 1,
+      "gemini": 0,
+      "grok": 0
+    },
+    "rejectionOverlap": {
+      "gpt": 0,
+      "claude": 1,
+      "gemini": 0,
+      "grok": 0
+    },
+    "rankCorrelationNotes": "No cross-curator provider trials have run yet; overlap metrics remain zeroed placeholders.",
+    "rationaleSpecificity": "medium",
+    "rationaleVocabularySimilarity": {
+      "gpt": "low",
+      "claude": "high",
+      "gemini": "low",
+      "grok": "low"
+    },
+    "mediaAndCategoryDistribution": {
+      "screenshot": 1,
+      "net-art": 1,
+      "tool": 1,
+      "dataset": 1,
+      "generated image": 1
+    },
+    "orderSensitivity": "medium",
+    "charterChoiceContradictionNotes": [
+      "Provider-backed repeat trials are required before judging order sensitivity."
+    ]
+  },
+  "benchmarkMetadata": {
+    "promptVersion": "curator-initiation-v0",
+    "seedPackVersion": "taste-seed-pack-v0",
+    "modelName": "deterministic-mock-charter",
+    "provider": "mock",
+    "temperature": null,
+    "runTimestamp": "2026-05-19T05:36:18.601Z"
+  },
+  "operatorReview": {
+    "decision": "pending",
+    "accepted": false,
+    "reviewerNotes": "",
+    "reasonForAcceptance": "",
+    "knownWeaknesses": [
+      "Local deterministic initiation is not a substitute for provider-backed behavior."
+    ],
+    "distinctivenessAssessment": "",
+    "groundingAssessment": "",
+    "acceptedDate": null
+  }
+}

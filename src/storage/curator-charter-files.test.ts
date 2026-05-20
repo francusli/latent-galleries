@@ -11,10 +11,20 @@ import {
 import { createMockCuratorCharterDraft } from "@/src/curators/mock-charters";
 import {
   CuratorCharterFileError,
+  getCuratorCharterDraftPath,
   getCuratorCharterPath,
+  getReviewedCuratorCharterPath,
+  getTasteProfileDraftPath,
   readCuratorCharter,
+  writeDraftCuratorCharter,
+  writeReviewedCuratorCharter,
   writeCuratorCharterDraft,
+  writeTasteProfileDraft,
 } from "@/src/storage/curator-charter-files";
+import {
+  createMockInitiationAdapter,
+  runCharterInitiation,
+} from "@/src/curators/initiation";
 
 describe("curator charter files", () => {
   it("reads every canonical curator charter from disk", async () => {
@@ -159,6 +169,131 @@ describe("curator charter files", () => {
         error instanceof CuratorCharterFileError &&
         error.message.includes("curatorialApproach") &&
         error.message.includes("selectionPrinciples"),
+    );
+  });
+
+  it("writes draft charter and taste profile without overwriting the fixture", async () => {
+    const baseDir = await createTempDir();
+    await writeCuratorCharterDraft("gpt", createMockCuratorCharterDraft("gpt"), {
+      baseDir,
+      now: new Date("2026-05-18T12:00:00.000Z"),
+    });
+    const fixturePath = getCuratorCharterPath("gpt", { baseDir });
+    const fixtureBefore = await readFile(fixturePath, "utf8");
+    const { charter, tasteProfile } = await runCharterInitiation({
+      curatorId: "gpt",
+      adapter: createMockInitiationAdapter(),
+      now: new Date("2026-05-18T12:02:00.000Z"),
+    });
+
+    await writeDraftCuratorCharter("gpt", charter, { baseDir });
+    await writeTasteProfileDraft("gpt", tasteProfile, { baseDir });
+
+    const fixtureAfter = await readFile(fixturePath, "utf8");
+    const draftRaw = await readFile(
+      getCuratorCharterDraftPath("gpt", { baseDir }),
+      "utf8",
+    );
+    const profileRaw = await readFile(
+      getTasteProfileDraftPath("gpt", { baseDir }),
+      "utf8",
+    );
+
+    assert.equal(fixtureAfter, fixtureBefore);
+    assert.equal(JSON.parse(draftRaw).curatorId, "gpt");
+    assert.equal(JSON.parse(profileRaw).operatorReview.decision, "pending");
+  });
+
+  it("prefers the latest reviewed dated charter with undated fallback", async () => {
+    const baseDir = await createTempDir();
+    await writeCuratorCharterDraft("claude", createMockCuratorCharterDraft("claude"), {
+      baseDir,
+      now: new Date("2026-05-18T12:00:00.000Z"),
+    });
+    const { charter, tasteProfile } = await runCharterInitiation({
+      curatorId: "claude",
+      adapter: createMockInitiationAdapter(),
+      now: new Date("2026-05-18T12:02:00.000Z"),
+    });
+    const acceptedProfile = {
+      ...tasteProfile,
+      operatorReview: {
+        ...tasteProfile.operatorReview,
+        decision: "accepted" as const,
+        accepted: true,
+        reviewerNotes: "Accepted for test.",
+        reasonForAcceptance: "Grounded enough for a dated reviewed charter.",
+        distinctivenessAssessment: "Distinct from fixtures in review.",
+        groundingAssessment: "Grounded in seed-pack behavior.",
+        acceptedDate: "2026-05-19T09:00:00.000Z",
+      },
+    };
+
+    await writeReviewedCuratorCharter(
+      "claude",
+      {
+        ...charter,
+        galleryName: "Reviewed Claude Gallery",
+      },
+      acceptedProfile,
+      { baseDir },
+    );
+
+    const loaded = await readCuratorCharter("claude", { baseDir });
+
+    assert.equal(
+      getReviewedCuratorCharterPath("claude", "2026-05-19", { baseDir }),
+      path.join(baseDir, "data", "curators", "2026-05-19.claude.charter.json"),
+    );
+    assert.equal(loaded?.galleryName, "Reviewed Claude Gallery");
+  });
+
+  it("rejects reviewed charter writes without an accepted taste profile", async () => {
+    const baseDir = await createTempDir();
+    const { charter, tasteProfile } = await runCharterInitiation({
+      curatorId: "gemini",
+      adapter: createMockInitiationAdapter(),
+      now: new Date("2026-05-18T12:02:00.000Z"),
+    });
+
+    await assert.rejects(
+      writeReviewedCuratorCharter("gemini", charter, tasteProfile, { baseDir }),
+      CuratorCharterFileError,
+    );
+  });
+
+  it("rejects reviewed charter writes with another curator's taste profile", async () => {
+    const baseDir = await createTempDir();
+    const { charter } = await runCharterInitiation({
+      curatorId: "gpt",
+      adapter: createMockInitiationAdapter(),
+      now: new Date("2026-05-18T12:02:00.000Z"),
+    });
+    const { tasteProfile } = await runCharterInitiation({
+      curatorId: "claude",
+      adapter: createMockInitiationAdapter(),
+      now: new Date("2026-05-18T12:03:00.000Z"),
+    });
+    const acceptedProfile = {
+      ...tasteProfile,
+      operatorReview: {
+        ...tasteProfile.operatorReview,
+        decision: "accepted" as const,
+        accepted: true,
+        reviewerNotes: "Accepted for test.",
+        reasonForAcceptance: "Grounded enough for a dated reviewed charter.",
+        distinctivenessAssessment: "Distinct from fixtures in review.",
+        groundingAssessment: "Grounded in seed-pack behavior.",
+        acceptedDate: "2026-05-19T09:00:00.000Z",
+      },
+    };
+
+    await assert.rejects(
+      writeReviewedCuratorCharter("gpt", charter, acceptedProfile, { baseDir }),
+      (error: unknown) =>
+        error instanceof CuratorCharterFileError &&
+        error.message.includes("gpt") &&
+        error.message.includes("claude taste profile"),
     );
   });
 });

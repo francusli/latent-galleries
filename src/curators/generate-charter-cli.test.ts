@@ -10,7 +10,11 @@ import {
   CURATOR_IDS,
   validateCuratorCharter,
 } from "@/src/domain/curator-charter";
-import { getCuratorCharterPath } from "@/src/storage/curator-charter-files";
+import {
+  getCuratorCharterDraftPath,
+  getCuratorCharterPath,
+  getTasteProfileDraftPath,
+} from "@/src/storage/curator-charter-files";
 
 const execFileAsync = promisify(execFile);
 const tsxBin = path.join(process.cwd(), "node_modules", ".bin", "tsx");
@@ -44,6 +48,46 @@ describe("generate-charter CLI", () => {
       );
       assert.equal(validateCuratorCharter(JSON.parse(raw)).ok, true);
     }
+  });
+
+  it("creates draft charter and taste profile files without fixture output", async () => {
+    const baseDir = await createTempDir();
+
+    await execFileAsync(
+      tsxBin,
+      [scriptPath, "--curator", "gpt", "--draft", "--taste-profile"],
+      {
+        env: { ...process.env, LATENT_GALLERIES_CHARTER_BASE_DIR: baseDir },
+      },
+    );
+
+    const draftRaw = await readFile(
+      getCuratorCharterDraftPath("gpt", { baseDir }),
+      "utf8",
+    );
+    const profileRaw = await readFile(
+      getTasteProfileDraftPath("gpt", { baseDir }),
+      "utf8",
+    );
+
+    assert.equal(validateCuratorCharter(JSON.parse(draftRaw)).ok, true);
+    assert.equal(JSON.parse(profileRaw).curatorId, "gpt");
+    await assert.rejects(readFile(getCuratorCharterPath("gpt", { baseDir }), "utf8"));
+  });
+
+  it("refuses real provider initiation until a real adapter is configured", async () => {
+    const baseDir = await createTempDir();
+
+    await assert.rejects(
+      execFileAsync(
+        tsxBin,
+        [scriptPath, "--curator", "gpt", "--provider", "real", "--draft"],
+        {
+          env: { ...process.env, LATENT_GALLERIES_CHARTER_BASE_DIR: baseDir },
+        },
+      ),
+      /not configured/,
+    );
   });
 });
 
